@@ -4,7 +4,7 @@
 // ─────────────────────────────────────────────────────────────
 
 export const SITE_CONFIG = {
-  whatsappNumber: '385976659656', // ← replace with your real number
+  whatsappNumber: '385992044055', // ← replace with your real number
   siteName: 'Split Experience',
   siteUrl: 'https://splitexperience.com',
 };
@@ -206,7 +206,7 @@ export const experiences: Experience[] = [
     price: undefined,
     description:
       'The best beaches in Dalmatia are not on Google Maps. You need wheels. We arrange the right car at a fair price, collected wherever you\'re staying.',
-    image: 'https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&w=1400&q=80',
+    image: '3',
     imageAlt: 'Car rental Split Croatia coastal drive',
     ctaLabel: 'Find the best deal',
     affiliateUrl: 'https://www.discovercars.com/?a_aid=antontrumbic&a_bid=4abe6023',
