@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { experiences, featuredIds } from '@/data/experiences';
 import { buildWhatsAppUrl } from '@/lib/referral';
 
@@ -46,7 +47,7 @@ export default function FeaturedPicks({ hostName }: FeaturedPicksProps) {
               overflow: 'hidden', cursor: 'pointer',
               borderLeft: '1px solid rgba(255,255,255,0.05)',
             }}>
-              <img src={exp.image} alt={exp.imageAlt} className="trip-img" />
+              <Image src={exp.image} alt={exp.imageAlt} fill sizes="240px" className="trip-img" />
               <div style={{
                 position: 'absolute', inset: 0, display: 'flex', flexDirection: 'column',
                 justifyContent: 'flex-end', padding: '22px',

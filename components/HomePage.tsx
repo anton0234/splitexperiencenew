@@ -28,30 +28,36 @@ export default function HomePage({ hostName, welcomeNote }: HomePageProps) {
       {hostName && <HostWelcome hostName={hostName} welcomeNote={welcomeNote} />}
       <TrustStrip hostName={hostName} />
 
-      <CategoryDivider {...categories[0]} />
-      <div className="reveal exp-grid-3">
-        {explore.map((exp) => (
-          <ExpCard key={exp.id} exp={exp} hostName={hostName} style={{ height: '46vh' }} />
-        ))}
-      </div>
+      <section id="explore" style={{ background: '#1c1814' }}>
+        <CategoryDivider {...categories[0]} dark />
+        <div className="reveal exp-grid-3" style={{ paddingBottom: '56px' }}>
+          {explore.map((exp) => (
+            <ExpCard key={exp.id} exp={exp} hostName={hostName} style={{ height: '46vh' }} />
+          ))}
+        </div>
+      </section>
 
-      <CategoryDivider {...categories[1]} />
-      <div className="reveal exp-grid-3">
-        {adventure.map((exp) => (
-          <ExpCard key={exp.id} exp={exp} hostName={hostName} style={{ height: '42vh' }} />
-        ))}
-      </div>
+      <section id="adventure">
+        <CategoryDivider {...categories[1]} />
+        <div className="reveal exp-grid-3" style={{ paddingBottom: '56px' }}>
+          {adventure.map((exp) => (
+            <ExpCard key={exp.id} exp={exp} hostName={hostName} style={{ height: '42vh' }} />
+          ))}
+        </div>
+      </section>
 
-      <CategoryDivider {...categories[2]} />
-      <div className="reveal exp-grid-3 exp-grid-3--compact">
-        {dining.map((exp) => (
-          <ExpCard key={exp.id} exp={exp} hostName={hostName} compact style={{ height: '30vh' }} />
-        ))}
-      </div>
+      <section id="dining" style={{ background: '#1c1814' }}>
+        <CategoryDivider {...categories[2]} dark />
+        <div className="reveal exp-grid-3 exp-grid-3--compact" style={{ paddingBottom: '56px' }}>
+          {dining.map((exp) => (
+            <ExpCard key={exp.id} exp={exp} hostName={hostName} compact style={{ height: '30vh' }} />
+          ))}
+        </div>
+      </section>
 
-      <section id="essentials" className="ess-section">
+      <section id="essentials">
         <CategoryDivider {...categories[3]} />
-        <div className="reveal exp-grid-2">
+        <div className="reveal exp-grid-2" style={{ paddingBottom: '56px' }}>
           {essentials.map((exp) => (
             <ExpCard key={exp.id} exp={exp} hostName={hostName} style={{ height: '40vh' }} />
           ))}

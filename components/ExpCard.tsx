@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { Experience } from '@/data/experiences';
 import { buildWhatsAppUrl } from '@/lib/referral';
 
@@ -16,7 +17,7 @@ export default function ExpCard({ exp, hostName, style, compact }: ExpCardProps)
   return (
     <a href={cardHref || undefined} target="_blank" rel="noopener noreferrer" style={{ display: 'block', textDecoration: 'none' }}>
     <div className="exp-card" style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer', minHeight: compact ? '180px' : '240px', ...style }}>
-      <img src={exp.image} alt={exp.imageAlt} className="exp-img" />
+      <Image src={exp.image} alt={exp.imageAlt} fill sizes="(max-width: 900px) 100vw, 33vw" className="exp-img" />
 
       <div style={{
         position: 'absolute', top: compact ? '10px' : '16px', left: compact ? '10px' : '16px',

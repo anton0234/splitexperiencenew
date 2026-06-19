@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { buildWhatsAppUrl } from '@/lib/referral';
 
 interface HeroProps {
@@ -9,10 +10,13 @@ export default function Hero({ hostName }: HeroProps) {
 
   return (
     <section className="hero-section">
-      <img
+      <Image
         src="/images/hero.jpg"
         alt="Split Croatia aerial"
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 60%' }}
+        fill
+        priority
+        sizes="100vw"
+        style={{ objectFit: 'cover', objectPosition: 'center 60%' }}
       />
       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(105deg,rgba(0,0,0,0.76) 0%,rgba(0,0,0,0.18) 65%)' }} />
 
