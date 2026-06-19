@@ -18,6 +18,10 @@ export const hosts: Record<string, HostConfig> = {
     welcomeNote:
       "We've stayed in this neighborhood for years and these are the only places we actually send our friends. Enjoy Split.",
   },
+  apartmentspalatum: {
+    welcomeNote:
+      "You're staying steps from Diocletian's Palace — one of the best-preserved Roman monuments in the world. These are the experiences we'd choose ourselves. Enjoy every minute.",
+  },
 };
 
 /**
