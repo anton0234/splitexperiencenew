@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "Bash(start \"\" \"C:\\\\Users\\\\User\\\\Desktop\\\\New folder \\(2\\)\\\\splitexperience\\\\public\\\\preview-tour-detail.html\")"
+    ]
+  }
+}

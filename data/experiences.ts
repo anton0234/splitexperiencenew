@@ -41,7 +41,7 @@ export const experiences: Experience[] = [
     subtitle: '& Hvar Island',
     duration: 'Full Day',
     location: 'Hvar · Vis Island',
-    price: 'From €65 per person',
+    price: 'From €130 per person',
     description:
       'The sea turns luminescent blue inside the cave on Vis Island — a natural phenomenon that stops people mid-sentence. Then Hvar, shown to you the way locals actually experience it: not the main strip.',
     image: '/images/hvar.jpg',
@@ -59,7 +59,7 @@ export const experiences: Experience[] = [
     subtitle: 'National Park',
     duration: 'Half Day',
     location: 'Šibenik Region',
-    price: 'From €45 per person',
+    price: 'From €35 per person',
     description:
       'Swim beneath waterfalls an hour from your door. Untouched Mediterranean woodland, cascades, and none of the tour-bus crowds — we know the right entry point and the right time to go.',
     image: '/images/krka.jpg',
@@ -77,7 +77,7 @@ export const experiences: Experience[] = [
     subtitle: 'Boat Tour',
     duration: 'Half or Full Day',
     location: 'Split Archipelago',
-    price: 'From €350 per boat',
+    price: '€500 – €1300 per boat',
     description:
       'Your own skipper, your own route. Hidden coves, swimming stops only locals know, lunch wherever you decide. No schedule but yours.',
     image: 'https://images.unsplash.com/photo-1540946485063-a40da27545f8?auto=format&fit=crop&w=1400&q=80',
@@ -97,7 +97,7 @@ export const experiences: Experience[] = [
     subtitle: 'Split',
     duration: '3 Hours',
     location: 'Split Canyon',
-    price: 'From €55 per person',
+    price: 'From €80 per person',
     description:
       'Seven lines over a canyon. The Adriatic in the distance, the Dalmatian hills below you. No planning — we sort it all.',
     image: '/images/zipline.jpg',
@@ -115,7 +115,7 @@ export const experiences: Experience[] = [
     subtitle: 'Safari',
     duration: '3 Hours',
     location: 'Split Hinterland',
-    price: 'From €80 per person',
+    price: '€80 – €120 per person',
     description:
       'Dust trails through olive groves and stone villages. Sunset from the hills above Split with the whole Dalmatian coast below — on your own machine.',
     image: '/images/quad.jpg',
@@ -206,7 +206,7 @@ export const experiences: Experience[] = [
     price: undefined,
     description:
       'The best beaches in Dalmatia are not on Google Maps. You need wheels. We arrange the right car at a fair price, collected wherever you\'re staying.',
-    image: '3',
+    image: '/images/rentacar.jpg',
     imageAlt: 'Car rental Split Croatia coastal drive',
     ctaLabel: 'Find the best deal',
     affiliateUrl: 'https://www.discovercars.com/?a_aid=antontrumbic&a_bid=4abe6023',

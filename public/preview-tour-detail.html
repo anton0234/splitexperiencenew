@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tour Detail Preview — Split Experience</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Lora:ital,wght@0,400;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: #fff; color: #111; font-family: 'Inter', sans-serif; font-weight: 300; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      background: rgba(255,255,255,0.97); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+      padding: 0 56px; display: flex; justify-content: space-between;
+      align-items: center; height: 68px;
+    }
+    .logo {
+      font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 20px;
+      letter-spacing: 0.06em; color: #111; text-transform: uppercase; text-decoration: none;
+    }
+    .logo span { color: #e8356d; }
+    .back-link {
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #666; text-decoration: none;
+    }
+
+    /* ── HERO ── */
+    .tour-hero {
+      margin-top: 68px;
+      height: 60vh;
+      position: relative;
+      overflow: hidden;
+    }
+    .tour-hero img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.45);
+    }
+    .tour-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.75) 0%, rgba(0,0,0,0.1) 60%, transparent 100%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 48px 56px;
+    }
+    .tour-eyebrow {
+      font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase;
+      color: #e8356d; margin-bottom: 12px;
+    }
+    .tour-title {
+      font-family: 'Oswald', sans-serif; font-weight: 700;
+      font-size: clamp(42px, 6vw, 80px); text-transform: uppercase;
+      color: #fff; line-height: 0.92; letter-spacing: 0.01em;
+    }
+    .tour-title em {
+      font-family: 'Lora', serif; font-style: italic; font-weight: 400;
+      font-size: clamp(16px, 2vw, 26px); text-transform: none;
+      color: rgba(255,255,255,0.45); display: block;
+      line-height: 1.5; margin-top: 10px;
+    }
+
+    /* ── META STRIP ── */
+    .meta-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid rgba(0,0,0,0.08);
+    }
+    .meta-item {
+      padding: 22px 28px;
+      border-right: 1px solid rgba(0,0,0,0.07);
+    }
+    .meta-item:last-child { border-right: none; }
+    .meta-label {
+      font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: #bbb; margin-bottom: 6px;
+    }
+    .meta-value {
+      font-family: 'Oswald', sans-serif; font-size: 15px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.06em; color: #111;
+    }
+
+    /* ── CONTENT ── */
+    .tour-body {
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 64px 56px;
+      align-items: start;
+    }
+    .tour-main { padding-right: 64px; }
+
+    .section-label {
+      font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase;
+      color: #e8356d; margin-bottom: 14px;
+    }
+    .section-title {
+      font-family: 'Oswald', sans-serif; font-size: 22px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.05em;
+      color: #111; margin-bottom: 18px; margin-top: 44px;
+    }
+    .section-title:first-of-type { margin-top: 0; }
+    .tour-description {
+      font-size: 15px; color: #444; line-height: 1.9; margin-bottom: 32px;
+    }
+
+    /* checklist */
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 10px; margin-bottom: 32px; }
+    .checklist li {
+      display: grid; grid-template-columns: 20px 1fr; gap: 12px;
+      align-items: start; font-size: 14px; color: #555; line-height: 1.6;
+    }
+    .checklist li::before {
+      content: '—'; color: #e8356d; font-family: 'Lora', serif;
+      font-style: italic; font-size: 16px; line-height: 1.4;
+    }
+
+    /* rules */
+    .rules-grid { display: flex; flex-direction: column; gap: 0; margin-bottom: 32px; }
+    .rule-item {
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+      display: grid; grid-template-columns: 20px 1fr; gap: 12px;
+      font-size: 14px; color: #555; line-height: 1.6;
+    }
+    .rule-item::before {
+      content: '·'; color: #e8356d; font-size: 20px; line-height: 1.2;
+    }
+
+    /* ── SIDEBAR ── */
+    .tour-sidebar { position: sticky; top: 88px; }
+    .booking-card {
+      background: #1c1814; padding: 36px;
+    }
+    .booking-card-label {
+      font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase;
+      color: rgba(255,255,255,0.3); margin-bottom: 8px;
+    }
+    .booking-card-price {
+      font-family: 'Oswald', sans-serif; font-size: 28px; font-weight: 700;
+      color: #fff; text-transform: uppercase; letter-spacing: 0.04em;
+      margin-bottom: 6px;
+    }
+    .booking-card-note {
+      font-family: 'Lora', serif; font-style: italic;
+      font-size: 13px; color: rgba(255,255,255,0.32);
+      line-height: 1.6; margin-bottom: 28px;
+    }
+    .btn-pink {
+      background: #e8356d; color: #fff;
+      padding: 14px 24px; font-size: 11px;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      border: none; cursor: pointer; font-family: 'Inter', sans-serif;
+      display: inline-flex; align-items: center; gap: 10px;
+      text-decoration: none; width: 100%; justify-content: center;
+      transition: background 0.2s; margin-bottom: 3px;
+    }
+    .btn-pink:hover { background: #c42d5d; }
+    .wa-dot {
+      width: 7px; height: 7px; background: #25D366;
+      border-radius: 50%; flex-shrink: 0;
+    }
+    .booking-card-divider {
+      border: none; border-top: 1px solid rgba(255,255,255,0.07);
+      margin: 24px 0;
+    }
+    .booking-card-includes-title {
+      font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: rgba(255,255,255,0.28); margin-bottom: 14px;
+    }
+    .includes-list { list-style: none; display: flex; flex-direction: column; gap: 9px; }
+    .includes-list li {
+      font-size: 12px; color: rgba(255,255,255,0.45); line-height: 1.5;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .includes-list li::before {
+      content: ''; width: 4px; height: 4px;
+      background: #e8356d; border-radius: 50%; flex-shrink: 0;
+    }
+
+    /* ── DIVIDER ── */
+    .content-divider {
+      border: none;
+      border-top: 1px solid rgba(0,0,0,0.08);
+      margin: 0 56px;
+    }
+
+    /* ── TOUR TABS (switcher to preview all 6 tours) ── */
+    .preview-tabs {
+      display: flex; gap: 0; overflow-x: auto;
+      background: #f5f5f5; border-bottom: 1px solid rgba(0,0,0,0.1);
+      padding: 0 56px;
+    }
+    .preview-tab {
+      padding: 12px 20px; font-size: 10px; letter-spacing: 0.16em;
+      text-transform: uppercase; cursor: pointer; white-space: nowrap;
+      border: none; background: none; color: #888; border-bottom: 2px solid transparent;
+      font-family: 'Inter', sans-serif; transition: color 0.2s;
+    }
+    .preview-tab.active { color: #111; border-bottom-color: #e8356d; }
+
+    @media (max-width: 900px) {
+      nav, .tour-hero-overlay, .content-divider { padding-left: 20px !important; padding-right: 20px !important; }
+      .meta-strip { grid-template-columns: 1fr 1fr; }
+      .meta-item:nth-child(2) { border-right: none; }
+      .tour-body { grid-template-columns: 1fr; padding: 40px 20px; }
+      .tour-main { padding-right: 0; margin-bottom: 40px; }
+      .tour-sidebar { position: static; }
+      .preview-tabs { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Preview tab switcher (not part of final site) -->
+<div class="preview-tabs" style="position:fixed;top:0;left:0;right:0;z-index:300;">
+  <button class="preview-tab active" onclick="showTour('blue-cave')">01 Blue Cave</button>
+  <button class="preview-tab" onclick="showTour('krka')">02 Krka</button>
+  <button class="preview-tab" onclick="showTour('boat')">03 Boat</button>
+  <button class="preview-tab" onclick="showTour('zipline')">04 Zipline</button>
+  <button class="preview-tab" onclick="showTour('quad')">05 Quad</button>
+  <button class="preview-tab" onclick="showTour('rafting')">06 Rafting</button>
+</div>
+
+<div style="height:44px;"></div>
+
+<!-- ════════════════════════════════════════════════
+     01 · BLUE CAVE & HVAR
+════════════════════════════════════════════════ -->
+<div id="tour-blue-cave">
+
+<nav>
+  <a href="/" class="logo">Split<span>.</span>Experience</a>
+  <a href="/" class="back-link">← Back</a>
+</nav>
+
+<div class="tour-hero">
+  <img src="https://images.unsplash.com/photo-1555990793-da11153b6ded?auto=format&fit=crop&w=1600&q=80" alt="Blue Cave Vis Island" />
+  <div class="tour-hero-overlay">
+    <div class="tour-eyebrow">01 · Explore</div>
+    <h1 class="tour-title">
+      Blue Cave
+      <em>& Hvar Island — Full Day</em>
+    </h1>
+  </div>
+</div>
+
+<div class="meta-strip">
+  <div class="meta-item">
+    <div class="meta-label">Duration</div>
+    <div class="meta-value">Full Day · ~10 hrs</div>
+  </div>
+  <div class="meta-item">
+    <div class="meta-label">Departs</div>
+    <div class="meta-value">07:30 AM</div>
+  </div>
+  <div class="meta-item">
+    <div class="meta-label">Location</div>
+    <div class="meta-value">Hvar · Vis Island</div>
+  </div>
+  <div class="meta-item">
+    <div class="meta-label">Price</div>
+    <div class="meta-value">€130 / person</div>
+  </div>
+</div>
+
+<div class="tour-body">
+  <div class="tour-main">
+
+    <div class="section-label">About this experience</div>
+    <p class="tour-description">
+      The sea inside the Blue Cave on Vis Island turns a supernatural luminescent blue — a natural phenomenon caused by sunlight refracting through an underwater opening. It stops people mid-sentence. After that, Hvar, shown to you the way locals actually experience it: narrow stone lanes, a terrace nobody from TripAdvisor has found, cold wine by the water.
+    </p>
+    <p class="tour-description">
+      The day covers five islands in the Adriatic — Biševo, Vis, Budikovac lagoon, and Pakleni — with swimming stops along the way. We know the right boat, the right guide, and the right time to arrive at the cave before the crowds.
+    </p>
+
+    <h2 class="section-title">What to bring</h2>
+    <ul class="checklist">
+      <li>Swimsuit and towel</li>
+      <li>Sunscreen, sunglasses, and a hat</li>
+      <li>Light windbreaker or long sleeves (the boat ride is fast)</li>
+      <li>Water shoes — the Blue Lagoon has a rocky bottom</li>
+      <li>Cash for the Blue Cave entrance fee (€18–24, not included)</li>
+      <li>Camera or waterproof phone case</li>
+      <li>Snacks and water for the journey</li>
+    </ul>
+
+    <h2 class="section-title">Good to know</h2>
+    <div class="rules-grid">
+      <div class="rule-item">Swimming inside the Blue Cave is not permitted — you view it from the boat</div>
+      <div class="rule-item">Not recommended for pregnant women or people with serious back problems (speedboat rides can be bumpy)</div>
+      <div class="rule-item">Not recommended for children under 3 years old</div>
+      <div class="rule-item">Blue Cave entrance fee paid on-site in cash only (€18 Apr–Jun & Sep–Oct / €24 Jul–Aug)</div>
+      <div class="rule-item">Tour departs regardless of light rain — cancelled only in severe weather, full refund applies</div>
+      <div class="rule-item">Snorkelling equipment included</div>
+    </div>
+
+  </div>
+
+  <div class="tour-sidebar">
+    <div class="booking-card">
+      <div class="booking-card-label">Price from</div>
+      <div class="booking-card-price">€130 / person</div>
+      <div class="booking-card-note">Blue Cave entrance fee included. All islands, all stops, one price.</div>
+      <a href="#" class="btn-pink"><span class="wa-dot"></span>Book via WhatsApp</a>
+      <hr class="booking-card-divider" />
+      <div class="booking-card-includes-title">What's included</div>
+      <ul class="includes-list">
+        <li>Speedboat & professional skipper</li>
+        <li>Snorkelling equipment</li>
+        <li>Swimming stops at hidden coves</li>
+        <li>Hvar town visit</li>
+        <li>Pick-up from Split harbour</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tour-blue-cave -->
+
+
+<!-- ════════════════════════════════════════════════
+     02 · KRKA
+════════════════════════════════════════════════ -->
+<div id="tour-krka" style="display:none;">
+
+<nav>
+  <a href="/" class="logo">Split<span>.</span>Experience</a>
+  <a href="/" class="back-link">← Back</a>
+</nav>
+
+<div class="tour-hero">
+  <img src="https://images.unsplash.com/photo-1586348943529-beaae6c28db9?auto=format&fit=crop&w=1600&q=80" alt="Krka Waterfalls" />
+  <div class="tour-hero-overlay">
+    <div class="tour-eyebrow">02 · Explore</div>
+    <h1 class="tour-title">
+      Krka
+      <em>National Park — Half Day</em>
+    </h1>
+  </div>
+</div>
+
+<div class="meta-strip">
+  <div class="meta-item"><div class="meta-label">Duration</div><div class="meta-value">~8–9 Hours</div></div>
+  <div class="meta-item"><div class="meta-label">Departs</div><div class="meta-value">07:45 AM</div></div>
+  <div class="meta-item"><div class="meta-label">Location</div><div class="meta-value">Šibenik Region</div></div>
+  <div class="meta-item"><div class="meta-label">Price</div><div class="meta-value">€35 / person</div></div>
+</div>
+
+<div class="tour-body">
+  <div class="tour-main">
+    <div class="section-label">About this experience</div>
+    <p class="tour-description">
+      Swim beneath waterfalls an hour from your door. The Krka River has carved a series of cascades through untouched Mediterranean woodland — the kind of place you assumed only existed in films. We know the right entry point, the right time to arrive, and how to avoid the tour-bus rush. Lunch at a local village and a stop in Šibenik on the way back.
+    </p>
+
+    <h2 class="section-title">What to bring</h2>
+    <ul class="checklist">
+      <li>Swimsuit and towel</li>
+      <li>Comfortable walking shoes — pathways can be slippery</li>
+      <li>Sunscreen, sunglasses, and a hat</li>
+      <li>Bottle of water</li>
+      <li>Cash for personal expenses</li>
+      <li>Camera</li>
+    </ul>
+
+    <h2 class="section-title">Good to know</h2>
+    <div class="rules-grid">
+      <div class="rule-item">Swimming permitted only in designated areas (Roški Slap, Stinice, Pisak) from 1 June to 30 September</div>
+      <div class="rule-item">Drones are strictly prohibited inside the park — confiscation and fines apply</div>
+      <div class="rule-item">Tour runs in light rain (ponchos provided) — cancelled only in severe weather</div>
+      <div class="rule-item">National park entrance fee paid separately on arrival (not included)</div>
+      <div class="rule-item">No lunch included — plenty of options inside the park and in Šibenik</div>
+    </div>
+  </div>
+
+  <div class="tour-sidebar">
+    <div class="booking-card">
+      <div class="booking-card-label">Price from</div>
+      <div class="booking-card-price">€35 / person</div>
+      <div class="booking-card-note">National Park entrance fee paid separately on arrival.</div>
+      <a href="#" class="btn-pink"><span class="wa-dot"></span>Book via WhatsApp</a>
+      <hr class="booking-card-divider" />
+      <div class="booking-card-includes-title">What's included</div>
+      <ul class="includes-list">
+        <li>Return transport from Split</li>
+        <li>Return transport from Split</li>
+        <li>English-speaking guide</li>
+        <li>Šibenik stop</li>
+        <li>English-speaking guide</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tour-krka -->
+
+
+<!-- ════════════════════════════════════════════════
+     03 · PRIVATE BOAT
+════════════════════════════════════════════════ -->
+<div id="tour-boat" style="display:none;">
+
+<nav>
+  <a href="/" class="logo">Split<span>.</span>Experience</a>
+  <a href="/" class="back-link">← Back</a>
+</nav>
+
+<div class="tour-hero">
+  <img src="https://images.unsplash.com/photo-1540946485063-a40da27545f8?auto=format&fit=crop&w=1600&q=80" alt="Private Boat Tour Split" />
+  <div class="tour-hero-overlay">
+    <div class="tour-eyebrow">03 · Explore</div>
+    <h1 class="tour-title">
+      Private Boat
+      <em>Tour — Half or Full Day</em>
+    </h1>
+  </div>
+</div>
+
+<div class="meta-strip">
+  <div class="meta-item"><div class="meta-label">Duration</div><div class="meta-value">4–8 Hours</div></div>
+  <div class="meta-item"><div class="meta-label">Departs</div><div class="meta-value">Your choice</div></div>
+  <div class="meta-item"><div class="meta-label">Location</div><div class="meta-value">Split Archipelago</div></div>
+  <div class="meta-item"><div class="meta-label">Price</div><div class="meta-value">€500 – €1,300 / boat</div></div>
+</div>
+
+<div class="tour-body">
+  <div class="tour-main">
+    <div class="section-label">About this experience</div>
+    <p class="tour-description">
+      Your own skipper, your own route, your own schedule. No group. No compromises. We put you on a private boat with a local who knows every hidden cove, every swimming spot, and every lunch place worth stopping at. You decide when to leave, where to go, and how long to stay.
+    </p>
+    <p class="tour-description">
+      Up to 12 guests on one boat. Half-day or full day, morning or afternoon. The Pakleni Islands, Blue Lagoon, Hvar — whatever makes sense for your group.
+    </p>
+
+    <h2 class="section-title">What to bring</h2>
+    <ul class="checklist">
+      <li>Swimsuit and towel</li>
+      <li>Sunscreen and sunglasses</li>
+      <li>Light layers for the boat ride</li>
+      <li>Camera</li>
+      <li>Cash or card for food and drinks on shore</li>
+    </ul>
+
+    <h2 class="section-title">Good to know</h2>
+    <div class="rules-grid">
+      <div class="rule-item">Maximum 12 guests per boat</div>
+      <div class="rule-item">Snorkelling equipment on board</div>
+      <div class="rule-item">Route is fully customisable — tell us what you want to see</div>
+      <div class="rule-item">Not recommended for pregnant women or those with serious back/neck injuries</div>
+      <div class="rule-item">Fuel and skipper included in the price — lunch and drinks extra</div>
+      <div class="rule-item">Available March through November</div>
+    </div>
+  </div>
+
+  <div class="tour-sidebar">
+    <div class="booking-card">
+      <div class="booking-card-label">Price from</div>
+      <div class="booking-card-price">€500 – €1,300 / boat</div>
+      <div class="booking-card-note">Price depends on boat and duration. Split between your group. Ask us what's available.</div>
+      <a href="#" class="btn-pink"><span class="wa-dot"></span>Book via WhatsApp</a>
+      <hr class="booking-card-divider" />
+      <div class="booking-card-includes-title">What's included</div>
+      <ul class="includes-list">
+        <li>Private boat & professional skipper</li>
+        <li>Snorkelling equipment</li>
+        <li>Fuel & marina fees</li>
+        <li>Fully customisable route</li>
+        <li>Up to 12 guests</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tour-boat -->
+
+
+<!-- ════════════════════════════════════════════════
+     04 · ZIPLINE
+════════════════════════════════════════════════ -->
+<div id="tour-zipline" style="display:none;">
+
+<nav>
+  <a href="/" class="logo">Split<span>.</span>Experience</a>
+  <a href="/" class="back-link">← Back</a>
+</nav>
+
+<div class="tour-hero">
+  <img src="https://images.unsplash.com/photo-1601024445121-e5b82f020549?auto=format&fit=crop&w=1600&q=80" alt="Zipline Split Canyon" />
+  <div class="tour-hero-overlay">
+    <div class="tour-eyebrow">04 · Adventure</div>
+    <h1 class="tour-title">
+      Zipline
+      <em>Cetina Canyon · 3 Hours</em>
+    </h1>
+  </div>
+</div>
+
+<div class="meta-strip">
+  <div class="meta-item"><div class="meta-label">Duration</div><div class="meta-value">~3 Hours</div></div>
+  <div class="meta-item"><div class="meta-label">Lines</div><div class="meta-value">8 Cables · 2,100m</div></div>
+  <div class="meta-item"><div class="meta-label">Location</div><div class="meta-value">Cetina Canyon, Omiš</div></div>
+  <div class="meta-item"><div class="meta-label">Price</div><div class="meta-value">€80 / person</div></div>
+</div>
+
+<div class="tour-body">
+  <div class="tour-main">
+    <div class="section-label">About this experience</div>
+    <p class="tour-description">
+      Eight steel cables strung across the Cetina Canyon, the longest running 700 metres at 150 metres above the canyon floor. The Adriatic coast in the distance, the Dalmatian hills below you. No planning required — we sort the transport, the gear, and the guide.
+    </p>
+
+    <h2 class="section-title">What to bring</h2>
+    <ul class="checklist">
+      <li>Sports shoes — trainers or hiking shoes (no sandals or flip-flops)</li>
+      <li>Comfortable, close-fitting clothing</li>
+      <li>At least 1 litre of water</li>
+      <li>Sunscreen</li>
+      <li>Small backpack for your belongings</li>
+      <li>Camera or GoPro (mounts provided)</li>
+    </ul>
+
+    <h2 class="section-title">Rules & requirements</h2>
+    <div class="rules-grid">
+      <div class="rule-item">Minimum age: 7 years old</div>
+      <div class="rule-item">Maximum weight: 140 kg</div>
+      <div class="rule-item">Participants under 17 must be accompanied by an adult</div>
+      <div class="rule-item">Not suitable for pregnant women or people with serious back injuries</div>
+      <div class="rule-item">Participants must be in reasonable physical condition — short walks on uneven terrain required</div>
+      <div class="rule-item">Helmet and full harness provided and mandatory throughout</div>
+      <div class="rule-item">If you carry fast-acting medication, bring it and inform your guide before the start</div>
+    </div>
+  </div>
+
+  <div class="tour-sidebar">
+    <div class="booking-card">
+      <div class="booking-card-label">Price from</div>
+      <div class="booking-card-price">€80 / person</div>
+      <div class="booking-card-note">All safety equipment included. Transport from Split arranged on request.</div>
+      <a href="#" class="btn-pink"><span class="wa-dot"></span>Book via WhatsApp</a>
+      <hr class="booking-card-divider" />
+      <div class="booking-card-includes-title">What's included</div>
+      <ul class="includes-list">
+        <li>8-line zipline experience</li>
+        <li>Helmet, harness & full safety gear</li>
+        <li>Professional guide</li>
+        <li>GoPro mount points on each line</li>
+        <li>Briefing & safety training</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tour-zipline -->
+
+
+<!-- ════════════════════════════════════════════════
+     05 · QUAD SAFARI
+════════════════════════════════════════════════ -->
+<div id="tour-quad" style="display:none;">
+
+<nav>
+  <a href="/" class="logo">Split<span>.</span>Experience</a>
+  <a href="/" class="back-link">← Back</a>
+</nav>
+
+<div class="tour-hero">
+  <img src="https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=1600&q=80" alt="Quad Safari Split" />
+  <div class="tour-hero-overlay">
+    <div class="tour-eyebrow">05 · Adventure</div>
+    <h1 class="tour-title">
+      Quad Safari
+      <em>Split Hinterland · 3 Hours</em>
+    </h1>
+  </div>
+</div>
+
+<div class="meta-strip">
+  <div class="meta-item"><div class="meta-label">Duration</div><div class="meta-value">~3 Hours</div></div>
+  <div class="meta-item"><div class="meta-label">Distance</div><div class="meta-value">40+ km of trails</div></div>
+  <div class="meta-item"><div class="meta-label">Location</div><div class="meta-value">Split Hinterland</div></div>
+  <div class="meta-item"><div class="meta-label">Price</div><div class="meta-value">€80 – €120 / person</div></div>
+</div>
+
+<div class="tour-body">
+  <div class="tour-main">
+    <div class="section-label">About this experience</div>
+    <p class="tour-description">
+      Dust trails through olive groves and stone villages. The kind of landscape that doesn't make it onto postcards but stays in your memory. Sunset from the hills above Split with the whole Dalmatian coast laid out below — on your own machine, at your own pace.
+    </p>
+
+    <h2 class="section-title">What to bring</h2>
+    <ul class="checklist">
+      <li>Valid driving licence (category B / car licence)</li>
+      <li>Comfortable, dirt-friendly clothes you don't mind getting dusty</li>
+      <li>Closed-toe shoes — no sandals</li>
+      <li>Sunglasses and sunscreen</li>
+      <li>Light jacket (wind gets strong at higher elevation)</li>
+      <li>Water</li>
+    </ul>
+
+    <h2 class="section-title">Rules & requirements</h2>
+    <div class="rules-grid">
+      <div class="rule-item">Valid driving licence (Category B) required to drive — passengers from age 12</div>
+      <div class="rule-item">Minimum driver age: 18 years</div>
+      <div class="rule-item">Helmet and safety goggles provided and mandatory</div>
+      <div class="rule-item">Safety briefing and practice laps before departure</div>
+      <div class="rule-item">Alcohol consumption before or during the tour is not permitted</div>
+      <div class="rule-item">Follow the guide at all times — no overtaking on trails</div>
+    </div>
+  </div>
+
+  <div class="tour-sidebar">
+    <div class="booking-card">
+      <div class="booking-card-label">Price from</div>
+      <div class="booking-card-price">€80 – €120 / person</div>
+      <div class="booking-card-note">Price depends on route and group size. Bring your driving licence.</div>
+      <a href="#" class="btn-pink"><span class="wa-dot"></span>Book via WhatsApp</a>
+      <hr class="booking-card-divider" />
+      <div class="booking-card-includes-title">What's included</div>
+      <ul class="includes-list">
+        <li>Quad bike (1 per person or shared)</li>
+        <li>Helmet, gloves & safety specs</li>
+        <li>Professional guide</li>
+        <li>Safety briefing & practice</li>
+        <li>Photos from the trail</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tour-quad -->
+
+
+<!-- ════════════════════════════════════════════════
+     06 · RAFTING
+════════════════════════════════════════════════ -->
+<div id="tour-rafting" style="display:none;">
+
+<nav>
+  <a href="/" class="logo">Split<span>.</span>Experience</a>
+  <a href="/" class="back-link">← Back</a>
+</nav>
+
+<div class="tour-hero">
+  <img src="https://images.unsplash.com/photo-1530866495561-507c9faab726?auto=format&fit=crop&w=1600&q=80" alt="Rafting Cetina River" />
+  <div class="tour-hero-overlay">
+    <div class="tour-eyebrow">06 · Adventure</div>
+    <h1 class="tour-title">
+      Rafting
+      <em>Cetina River · Half Day</em>
+    </h1>
+  </div>
+</div>
+
+<div class="meta-strip">
+  <div class="meta-item"><div class="meta-label">Duration</div><div class="meta-value">3–4 Hours</div></div>
+  <div class="meta-item"><div class="meta-label">Route</div><div class="meta-value">10 km river</div></div>
+  <div class="meta-item"><div class="meta-label">Location</div><div class="meta-value">Cetina River Canyon</div></div>
+  <div class="meta-item"><div class="meta-label">Price</div><div class="meta-value">From €50 / person</div></div>
+</div>
+
+<div class="tour-body">
+  <div class="tour-main">
+    <div class="section-label">About this experience</div>
+    <p class="tour-description">
+      Cold, clear river water cutting through a limestone canyon inland from the coast. Ten kilometres of level 2–3 rapids, cliff jumps, and swimming holes in water so clean it's drinkable. No experience required. Available April through November.
+    </p>
+
+    <h2 class="section-title">What to bring</h2>
+    <ul class="checklist">
+      <li>Swimsuit</li>
+      <li>Water shoes or old trainers you don't mind getting wet</li>
+      <li>Dry clothes and a towel for after</li>
+      <li>Waterproof camera or dry bag for your phone</li>
+      <li>Sunscreen</li>
+    </ul>
+
+    <h2 class="section-title">Rules & requirements</h2>
+    <div class="rules-grid">
+      <div class="rule-item">Minimum age: 8 years</div>
+      <div class="rule-item">No previous experience necessary — guides brief everyone before departure</div>
+      <div class="rule-item">Life jacket, paddle, and helmet provided and mandatory throughout</div>
+      <div class="rule-item">No alcohol before or during the rafting</div>
+      <div class="rule-item">Follow guide instructions at all times, especially in rapid sections</div>
+      <div class="rule-item">Available 1 April – end of November</div>
+    </div>
+  </div>
+
+  <div class="tour-sidebar">
+    <div class="booking-card">
+      <div class="booking-card-label">Price from</div>
+      <div class="booking-card-price">€50 / person</div>
+      <div class="booking-card-note">All safety equipment and guide included. No experience needed.</div>
+      <a href="#" class="btn-pink"><span class="wa-dot"></span>Book via WhatsApp</a>
+      <hr class="booking-card-divider" />
+      <div class="booking-card-includes-title">What's included</div>
+      <ul class="includes-list">
+        <li>Life jacket, helmet & paddle</li>
+        <li>Professional river guide</li>
+        <li>10 km rafting route</li>
+        <li>Swimming & cliff jump stops</li>
+        <li>Transport from Split on request</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</div><!-- /tour-rafting -->
+
+
+<script>
+  function showTour(id) {
+    ['blue-cave','krka','boat','zipline','quad','rafting'].forEach(t => {
+      document.getElementById('tour-' + t).style.display = (t === id) ? 'block' : 'none';
+    });
+    document.querySelectorAll('.preview-tab').forEach((btn, i) => {
+      btn.classList.toggle('active', btn.textContent.toLowerCase().includes(id.replace('-',' ')));
+    });
+    window.scrollTo(0, 0);
+  }
+</script>
+
+</body>
+</html>
