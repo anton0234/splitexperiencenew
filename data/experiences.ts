@@ -28,6 +28,12 @@ export interface Experience {
   whatsappMessage?: string;
   affiliateUrl?: string;
   layout: 'feature' | 'half' | 'third' | 'essential';
+  // Detail page fields (explore + adventure only)
+  departs?: string;
+  longDescription?: string;
+  bring?: string[];
+  rules?: string[];
+  includes?: string[];
 }
 
 export const experiences: Experience[] = [
@@ -49,6 +55,11 @@ export const experiences: Experience[] = [
     ctaLabel: 'Book via WhatsApp',
     whatsappMessage: "Hi, I'd like to book the Blue Cave & Hvar full day tour",
     layout: 'feature',
+    departs: '07:30 AM',
+    longDescription: 'The sea inside the Blue Cave on Vis Island turns a supernatural luminescent blue — a natural phenomenon caused by sunlight refracting through an underwater opening. It stops people mid-sentence. After that, Hvar shown to you the way locals actually experience it: narrow stone lanes, a terrace nobody from TripAdvisor has found, cold wine by the water. The day covers five islands — Biševo, Vis, Budikovac lagoon, and Pakleni — with swimming stops along the way. We know the right boat, the right guide, and the right time to arrive at the cave before the crowds.',
+    bring: ['Swimsuit and towel', 'Sunscreen, sunglasses, and a hat', 'Light windbreaker or long sleeves — speedboat rides are fast', 'Water shoes — the Blue Lagoon has a rocky bottom', 'Camera or waterproof phone case', 'Snacks and water for the journey'],
+    rules: ['No swimming inside the Blue Cave — you view it from the boat', 'Not recommended for pregnant women or people with serious back problems', 'Not recommended for children under 3 years old', 'Tour runs regardless of light rain — cancelled only in severe weather, full refund applies', 'Snorkelling equipment included'],
+    includes: ['Speedboat & professional skipper', 'Snorkelling equipment', 'Swimming stops at hidden coves', 'Hvar town visit', 'Pick-up from Split harbour'],
   },
   {
     id: 'krka',
@@ -67,6 +78,11 @@ export const experiences: Experience[] = [
     ctaLabel: 'Book via WhatsApp',
     whatsappMessage: "Hi, I'd like to book the Krka National Park tour",
     layout: 'feature',
+    departs: '07:45 AM',
+    longDescription: 'Swim beneath waterfalls an hour from your door. The Krka River has carved a series of cascades through untouched Mediterranean woodland — the kind of place you assumed only existed in films. We know the right entry point, the right time to arrive, and how to avoid the tour-bus rush. A stop in Šibenik on the way back.',
+    bring: ['Swimsuit and towel', 'Comfortable walking shoes — pathways can be slippery', 'Sunscreen, sunglasses, and a hat', 'Bottle of water', 'Cash for the National Park entrance fee', 'Camera'],
+    rules: ['Swimming permitted in designated areas only (1 June – 30 September)', 'Drones strictly prohibited inside the park — fines and confiscation apply', 'Tour runs in light rain (ponchos provided)', 'National Park entrance fee paid separately on arrival — not included in price', 'No lunch included — options available inside the park and in Šibenik'],
+    includes: ['Return transport from Split', 'English-speaking guide', 'Šibenik stop', 'Small group — no tour buses'],
   },
   {
     id: 'private-boat-tour',
@@ -85,6 +101,11 @@ export const experiences: Experience[] = [
     ctaLabel: 'Book via WhatsApp',
     whatsappMessage: "Hi, I'd like to book a Private Boat Tour",
     layout: 'feature',
+    departs: 'Your choice',
+    longDescription: 'Your own skipper, your own route, your own schedule. No group. No compromises. We put you on a private boat with a local who knows every hidden cove, every swimming stop, and every lunch place worth the anchor drop. You decide when to leave, where to go, and how long to stay. Price depends on which boat is available and how long you want it — we\'ll come back to you with options, usually within the hour.',
+    bring: ['Swimsuit and towel', 'Sunscreen and sunglasses', 'Light layers for the boat ride', 'Camera', 'Cash or card for food and drinks on shore'],
+    rules: ['Maximum 12 guests per boat', 'Route fully customisable — tell us what you want to see', 'Not recommended for pregnant women or those with serious back or neck injuries', 'Skipper and fuel included — food and drinks extra', 'Available March through November'],
+    includes: ['Private boat & professional skipper', 'Snorkelling equipment', 'Fuel & marina fees', 'Fully customisable route', 'Up to 12 guests'],
   },
 
   // ── ADVENTURE ────────────────────────────────────────────
@@ -105,6 +126,11 @@ export const experiences: Experience[] = [
     ctaLabel: 'Book via WhatsApp',
     whatsappMessage: "Hi, I'd like to book the Zipline adventure",
     layout: 'half',
+    departs: 'Morning',
+    longDescription: 'Eight steel cables strung across the Cetina Canyon, the longest running 700 metres at 150 metres above the canyon floor. The Adriatic coast in the distance, the Dalmatian hills below you. No planning required — we sort the transport, the gear, and the guide.',
+    bring: ['Sports shoes — trainers or hiking shoes (no sandals or flip-flops)', 'Comfortable, close-fitting clothing', 'At least 1 litre of water', 'Sunscreen', 'Small backpack for your belongings', 'Camera or GoPro'],
+    rules: ['Minimum age: 7 years · Maximum weight: 140 kg', 'Participants under 17 must be accompanied by an adult', 'Not suitable for pregnant women or people with serious back injuries', 'Helmet and full harness provided and mandatory throughout', 'Bring any fast-acting medication and inform your guide before the start'],
+    includes: ['8-line zipline experience', 'Helmet, harness & full safety gear', 'Professional guide', 'Safety briefing & practice runs'],
   },
   {
     id: 'quad-safari',
@@ -123,6 +149,11 @@ export const experiences: Experience[] = [
     ctaLabel: 'Book via WhatsApp',
     whatsappMessage: "Hi, I'd like to book the Quad Safari",
     layout: 'half',
+    departs: 'Morning / Afternoon',
+    longDescription: 'Dust trails through olive groves and stone villages. The kind of landscape that doesn\'t make it onto postcards but stays in your memory. Sunset from the hills above Split with the whole Dalmatian coast laid out below — on your own machine, at your own pace.',
+    bring: ['Valid driving licence (Category B)', 'Comfortable, dirt-friendly clothing', 'Closed-toe shoes — no sandals or flip-flops', 'Sunglasses and sunscreen', 'Light jacket — wind gets strong at higher elevation', 'Water'],
+    rules: ['Valid driving licence required to drive — passengers from age 12', 'Minimum driver age: 18 years', 'Helmet and safety goggles provided and mandatory', 'Safety briefing and practice laps before departure', 'No alcohol before or during the tour', 'Follow the guide at all times — no overtaking on trails'],
+    includes: ['Quad bike', 'Helmet, gloves & safety specs', 'Professional guide', 'Safety briefing & practice laps', 'Photos from the trail'],
   },
   {
     id: 'rafting',
@@ -141,6 +172,11 @@ export const experiences: Experience[] = [
     ctaLabel: 'Book via WhatsApp',
     whatsappMessage: "Hi, I'd like to book the Rafting trip on the Cetina River",
     layout: 'half',
+    departs: 'Morning',
+    longDescription: 'Cold, clear river water cutting through a limestone canyon inland from the coast. Ten kilometres of level 2–3 rapids, cliff jumps, and swimming holes in water so clean you can drink it. No experience required. Available April through November.',
+    bring: ['Swimsuit', 'Water shoes or old trainers you don\'t mind getting wet', 'Dry clothes and a towel for after', 'Waterproof camera or dry bag for your phone', 'Sunscreen'],
+    rules: ['Minimum age: 8 years', 'No previous experience necessary — guides brief everyone before departure', 'Life jacket, paddle, and helmet provided and mandatory throughout', 'No alcohol before or during the rafting', 'Follow guide instructions at all times', 'Available 1 April – end of November'],
+    includes: ['Life jacket, helmet & paddle', 'Professional river guide', '10 km rafting route', 'Swimming & cliff jump stops', 'Transport from Split on request'],
   },
 
   // ── DINING ───────────────────────────────────────────────

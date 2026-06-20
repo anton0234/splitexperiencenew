@@ -12,10 +12,20 @@ interface ExpCardProps {
 export default function ExpCard({ exp, hostName, style, compact }: ExpCardProps) {
   const waUrl = exp.whatsappMessage ? buildWhatsAppUrl(exp.whatsappMessage, hostName) : '';
 
-  const cardHref = exp.affiliateUrl ?? waUrl;
+  const hasTourPage = Boolean(exp.bring);
+  const tourHref = hasTourPage
+    ? `/tour/${exp.id}${hostName ? `?host=${encodeURIComponent(hostName)}` : ''}`
+    : null;
+  const cardHref = tourHref ?? exp.affiliateUrl ?? waUrl;
+  const isExternal = !hasTourPage;
 
   return (
-    <a href={cardHref || undefined} target="_blank" rel="noopener noreferrer" style={{ display: 'block', textDecoration: 'none' }}>
+    <a
+      href={cardHref || undefined}
+      target={isExternal ? '_blank' : undefined}
+      rel={isExternal ? 'noopener noreferrer' : undefined}
+      style={{ display: 'block', textDecoration: 'none' }}
+    >
     <div className="exp-card" style={{ position: 'relative', overflow: 'hidden', cursor: 'pointer', minHeight: compact ? '180px' : '240px', ...style }}>
       <Image src={exp.image} alt={exp.imageAlt} fill sizes="(max-width: 900px) 100vw, 33vw" className="exp-img" />
 
@@ -58,7 +68,7 @@ export default function ExpCard({ exp, hostName, style, compact }: ExpCardProps)
           </p>
         )}
 
-        {exp.ctaLabel && (
+        {(exp.ctaLabel || hasTourPage) && (
           <div style={{
             display: 'inline-flex', alignItems: 'center', gap: '8px',
             fontSize: compact ? '9px' : '10px', letterSpacing: '0.2em', textTransform: 'uppercase',
@@ -66,8 +76,8 @@ export default function ExpCard({ exp, hostName, style, compact }: ExpCardProps)
             padding: compact ? '7px 14px' : '10px 18px',
             width: 'max-content',
           }}>
-            {!exp.affiliateUrl && <span className="wa-dot" />}
-            {exp.ctaLabel}
+            {!hasTourPage && !exp.affiliateUrl && <span className="wa-dot" />}
+            {hasTourPage ? 'See details' : exp.ctaLabel}
           </div>
         )}
       </div>

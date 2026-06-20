@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tour Detail Preview — Split Experience</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Lora:ital,wght@0,400;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: #e8e8e8; font-family: 'Inter', sans-serif; font-weight: 300; }
+
+    /* ── PREVIEW CHROME ── */
+    .preview-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 9999;
+      background: #111; padding: 10px 24px;
+      display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    }
+    .preview-bar-label {
+      font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+      color: rgba(255,255,255,0.4); white-space: nowrap;
+    }
+    .preview-tours {
+      display: flex; gap: 6px; flex-wrap: wrap;
+    }
+    .ptab {
+      padding: 6px 14px; font-size: 9px; letter-spacing: 0.16em;
+      text-transform: uppercase; cursor: pointer; border: 1px solid rgba(255,255,255,0.15);
+      background: none; color: rgba(255,255,255,0.45); font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+    }
+    .ptab.active { background: #e8356d; border-color: #e8356d; color: #fff; }
+    .view-toggle {
+      display: flex; gap: 6px;
+    }
+    .vtab {
+      padding: 6px 14px; font-size: 9px; letter-spacing: 0.16em;
+      text-transform: uppercase; cursor: pointer; border: 1px solid rgba(255,255,255,0.15);
+      background: none; color: rgba(255,255,255,0.45); font-family: 'Inter', sans-serif;
+      transition: all 0.2s;
+    }
+    .vtab.active { background: rgba(255,255,255,0.12); color: #fff; border-color: rgba(255,255,255,0.3); }
+
+    .preview-stage {
+      padding-top: 56px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    /* ── DESKTOP FRAME ── */
+    .desktop-frame {
+      width: 100%;
+      background: #fff;
+    }
+    .desktop-frame.hidden { display: none; }
+
+    /* ── MOBILE FRAME ── */
+    .mobile-wrap {
+      padding: 32px 0;
+      display: flex;
+      justify-content: center;
+      gap: 40px;
+      align-items: flex-start;
+    }
+    .mobile-wrap.hidden { display: none; }
+    .phone {
+      width: 390px;
+      background: #fff;
+      border-radius: 44px;
+      box-shadow: 0 0 0 10px #1a1a1a, 0 30px 80px rgba(0,0,0,0.4);
+      overflow: hidden;
+      position: relative;
+      max-height: 844px;
+      overflow-y: auto;
+    }
+    .phone-notch {
+      position: sticky; top: 0; left: 0; right: 0; z-index: 100;
+      background: rgba(255,255,255,0.95); backdrop-filter: blur(8px);
+      height: 44px; display: flex; align-items: center; justify-content: center;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .phone-notch-pill {
+      width: 120px; height: 34px; background: #000; border-radius: 20px;
+    }
+    .phone-label {
+      text-align: center; font-size: 11px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: rgba(255,255,255,0.3);
+      margin-bottom: 12px; font-family: 'Inter', sans-serif;
+    }
+
+    /* ══════════════════════════════════════
+       ACTUAL PAGE STYLES
+    ══════════════════════════════════════ */
+    .site { color: #111; }
+
+    /* NAV */
+    .site-nav {
+      background: rgba(255,255,255,0.97);
+      border-bottom: 1px solid rgba(0,0,0,0.07);
+      padding: 0 56px; display: flex; justify-content: space-between;
+      align-items: center; height: 68px;
+    }
+    .site-nav.mobile { padding: 0 20px; }
+    .logo { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 20px; letter-spacing: 0.06em; color: #111; text-transform: uppercase; text-decoration: none; }
+    .logo span { color: #e8356d; }
+    .back-link { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #666; text-decoration: none; cursor: pointer; }
+
+    /* HERO */
+    .tour-hero { height: 58vh; position: relative; overflow: hidden; min-height: 320px; }
+    .tour-hero.mobile { height: 42vh; min-height: 260px; }
+    .tour-hero img { width: 100%; height: 100%; object-fit: cover; filter: brightness(0.42); }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.1) 55%, transparent 100%);
+      display: flex; flex-direction: column; justify-content: flex-end;
+      padding: 48px 56px;
+    }
+    .hero-overlay.mobile { padding: 28px 20px; }
+    .eyebrow { font-size: 10px; letter-spacing: 0.35em; text-transform: uppercase; color: #e8356d; margin-bottom: 10px; }
+    .tour-h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: clamp(38px, 5.5vw, 72px); text-transform: uppercase; color: #fff; line-height: 0.92; letter-spacing: 0.01em; }
+    .tour-h1.mobile { font-size: 36px; }
+    .tour-subtitle { font-family: 'Lora', serif; font-style: italic; font-weight: 400; font-size: 16px; text-transform: none; color: rgba(255,255,255,0.42); display: block; line-height: 1.5; margin-top: 8px; }
+
+    /* META STRIP */
+    .meta-strip { display: grid; grid-template-columns: repeat(4,1fr); border-bottom: 1px solid rgba(0,0,0,0.08); }
+    .meta-strip.mobile { grid-template-columns: 1fr 1fr; }
+    .meta-item { padding: 18px 24px; border-right: 1px solid rgba(0,0,0,0.07); }
+    .meta-item:last-child { border-right: none; }
+    .meta-strip.mobile .meta-item:nth-child(2) { border-right: none; }
+    .meta-strip.mobile .meta-item:nth-child(3) { border-top: 1px solid rgba(0,0,0,0.07); }
+    .meta-strip.mobile .meta-item:nth-child(4) { border-top: 1px solid rgba(0,0,0,0.07); border-right: none; }
+    .meta-label { font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; color: #bbb; margin-bottom: 5px; }
+    .meta-val { font-family: 'Oswald', sans-serif; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #111; }
+
+    /* BODY */
+    .tour-body { display: grid; grid-template-columns: 1fr 360px; padding: 56px 56px; gap: 48px; align-items: start; }
+    .tour-body.mobile { grid-template-columns: 1fr; padding: 32px 20px; gap: 32px; }
+    .tour-main {}
+    .sec-label { font-size: 9px; letter-spacing: 0.32em; text-transform: uppercase; color: #e8356d; margin-bottom: 12px; }
+    .tour-desc { font-size: 14px; color: #444; line-height: 1.9; margin-bottom: 28px; }
+    .sec-title { font-family: 'Oswald', sans-serif; font-size: 18px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #111; margin-bottom: 16px; margin-top: 36px; border-top: 1px solid rgba(0,0,0,0.07); padding-top: 28px; }
+
+    /* checklist */
+    .checklist { list-style: none; display: flex; flex-direction: column; gap: 9px; margin-bottom: 8px; }
+    .checklist li { display: grid; grid-template-columns: 16px 1fr; gap: 10px; align-items: start; font-size: 13px; color: #555; line-height: 1.65; }
+    .checklist li::before { content: '—'; color: #e8356d; font-family: 'Lora', serif; font-style: italic; font-size: 15px; line-height: 1.4; }
+
+    /* rules */
+    .rules { display: flex; flex-direction: column; }
+    .rule { padding: 12px 0; border-bottom: 1px solid rgba(0,0,0,0.06); display: grid; grid-template-columns: 16px 1fr; gap: 10px; font-size: 13px; color: #555; line-height: 1.65; }
+    .rule::before { content: '·'; color: #e8356d; font-size: 20px; line-height: 1.1; }
+
+    /* sidebar */
+    .tour-sidebar { position: sticky; top: 24px; }
+    .booking-card { background: #1c1814; padding: 32px; }
+    .bc-label { font-size: 9px; letter-spacing: 0.28em; text-transform: uppercase; color: rgba(255,255,255,0.28); margin-bottom: 6px; }
+    .bc-price { font-family: 'Oswald', sans-serif; font-size: 26px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+    .bc-note { font-family: 'Lora', serif; font-style: italic; font-size: 12px; color: rgba(255,255,255,0.28); line-height: 1.6; margin-bottom: 22px; }
+    .btn-wa { background: #e8356d; color: #fff; padding: 13px 20px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; border: none; cursor: pointer; font-family: 'Inter', sans-serif; display: flex; align-items: center; gap: 10px; width: 100%; justify-content: center; transition: background 0.2s; text-decoration: none; }
+    .btn-wa:hover { background: #c42d5d; }
+    .wa-dot { width: 7px; height: 7px; background: #25D366; border-radius: 50%; flex-shrink: 0; }
+    .bc-div { border: none; border-top: 1px solid rgba(255,255,255,0.07); margin: 22px 0; }
+    .bc-inc-title { font-size: 9px; letter-spacing: 0.26em; text-transform: uppercase; color: rgba(255,255,255,0.25); margin-bottom: 12px; }
+    .inc-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .inc-list li { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.5; display: flex; align-items: flex-start; gap: 10px; }
+    .inc-list li::before { content: ''; width: 4px; height: 4px; background: #e8356d; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
+
+    /* mobile sticky CTA */
+    .mobile-sticky-cta {
+      position: sticky; bottom: 0; left: 0; right: 0;
+      background: #fff; border-top: 1px solid rgba(0,0,0,0.1);
+      padding: 14px 20px;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .mobile-price { font-family: 'Oswald', sans-serif; font-size: 20px; font-weight: 700; color: #111; text-transform: uppercase; }
+    .mobile-price small { font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 300; color: #999; letter-spacing: 0.1em; display: block; text-transform: uppercase; }
+  </style>
+</head>
+<body>
+
+<!-- ── PREVIEW BAR ── -->
+<div class="preview-bar">
+  <span class="preview-bar-label">Preview</span>
+  <div class="preview-tours">
+    <button class="ptab active" onclick="showTour('blue-cave')">Blue Cave</button>
+    <button class="ptab" onclick="showTour('krka')">Krka</button>
+    <button class="ptab" onclick="showTour('boat')">Private Boat</button>
+    <button class="ptab" onclick="showTour('zipline')">Zipline</button>
+    <button class="ptab" onclick="showTour('quad')">Quad</button>
+    <button class="ptab" onclick="showTour('rafting')">Rafting</button>
+  </div>
+  <div class="view-toggle">
+    <button class="vtab active" onclick="setView('desktop')">Desktop</button>
+    <button class="vtab" onclick="setView('mobile')">Mobile</button>
+  </div>
+</div>
+
+<div class="preview-stage">
+
+  <!-- ════ DESKTOP ════ -->
+  <div class="desktop-frame" id="desktop-view">
+    <div class="site" id="site-content-desktop"></div>
+  </div>
+
+  <!-- ════ MOBILE ════ -->
+  <div class="mobile-wrap hidden" id="mobile-view">
+    <div>
+      <div class="phone-label">iPhone 14 Pro · 390px</div>
+      <div class="phone" id="phone-content"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const tours = {
+  'blue-cave': {
+    eyebrow: '01 · Explore',
+    title: 'Blue Cave',
+    subtitle: '& Hvar Island — Full Day',
+    image: 'https://images.unsplash.com/photo-1555990793-da11153b6ded?auto=format&fit=crop&w=1400&q=80',
+    meta: [
+      { label: 'Duration', val: 'Full Day · ~10 hrs' },
+      { label: 'Departs', val: '07:30 AM' },
+      { label: 'Location', val: 'Hvar · Vis Island' },
+      { label: 'Price', val: '€130 / person' },
+    ],
+    description: `The sea inside the Blue Cave on Vis Island turns a supernatural luminescent blue — a natural phenomenon caused by sunlight refracting through an underwater opening. It stops people mid-sentence. After that, Hvar shown to you the way locals actually experience it: narrow stone lanes, a terrace nobody from TripAdvisor has found, cold wine by the water.<br><br>The day covers five islands — Biševo, Vis, Budikovac lagoon, and Pakleni — with swimming stops along the way. We know the right boat, the right guide, and the right time to arrive at the cave before the crowds.`,
+    bring: ['Swimsuit and towel', 'Sunscreen, sunglasses, and a hat', 'Light windbreaker or long sleeves (the boat ride is fast)', 'Water shoes — the Blue Lagoon has a rocky bottom', 'Camera or waterproof phone case', 'Snacks and water for the journey'],
+    rules: ['Swimming inside the Blue Cave is not permitted — you view it from the boat', 'Not recommended for pregnant women or people with serious back problems', 'Not recommended for children under 3 years old', 'Tour departs regardless of light rain — cancelled only in severe weather, full refund applies', 'Snorkelling equipment included'],
+    price: '€130 / person',
+    note: 'Blue Cave entrance fee included. All islands, all stops, one price.',
+    includes: ['Speedboat & professional skipper', 'Snorkelling equipment', 'Swimming stops at hidden coves', 'Hvar town visit', 'Pick-up from Split harbour'],
+  },
+  'krka': {
+    eyebrow: '02 · Explore',
+    title: 'Krka',
+    subtitle: 'National Park — Half Day',
+    image: 'https://images.unsplash.com/photo-1586348943529-beaae6c28db9?auto=format&fit=crop&w=1400&q=80',
+    meta: [
+      { label: 'Duration', val: '~8–9 Hours' },
+      { label: 'Departs', val: '07:45 AM' },
+      { label: 'Location', val: 'Šibenik Region' },
+      { label: 'Price', val: '€35 / person' },
+    ],
+    description: `Swim beneath waterfalls an hour from your door. The Krka River has carved a series of cascades through untouched Mediterranean woodland — the kind of place you assumed only existed in films. We know the right entry point, the right time to arrive, and how to avoid the tour-bus rush. A stop in Šibenik on the way back.`,
+    bring: ['Swimsuit and towel', 'Comfortable walking shoes — pathways can be slippery', 'Sunscreen, sunglasses, and a hat', 'Bottle of water', 'Cash for the National Park entrance fee', 'Camera'],
+    rules: ['Swimming permitted only in designated areas (1 June – 30 September)', 'Drones strictly prohibited inside the park — confiscation and fines apply', 'Tour runs in light rain (ponchos provided)', 'National Park entrance fee paid separately on arrival (not included in price)', 'No lunch included — options available inside the park and in Šibenik'],
+    price: '€35 / person',
+    note: 'National Park entrance fee paid separately on arrival.',
+    includes: ['Return transport from Split', 'English-speaking guide', 'Šibenik stop', 'Small group (no tour buses)'],
+  },
+  'boat': {
+    eyebrow: '03 · Explore',
+    title: 'Private Boat',
+    subtitle: 'Tour — Half or Full Day',
+    image: 'https://images.unsplash.com/photo-1540946485063-a40da27545f8?auto=format&fit=crop&w=1400&q=80',
+    meta: [
+      { label: 'Duration', val: '4 – 8 Hours' },
+      { label: 'Departs', val: 'Your choice' },
+      { label: 'Guests', val: 'Up to 12' },
+      { label: 'Price', val: '€500 – €1,300 / boat' },
+    ],
+    description: `Your own skipper, your own route, your own schedule. No group. No compromises. We put you on a private boat with a local who knows every hidden cove, every swimming stop, and every lunch place worth the anchor drop. You decide when to leave, where to go, and how long to stay.<br><br>Price depends on which boat is available and how long you want it. We'll tell you what's free and what it costs — usually sorted within the hour.`,
+    bring: ['Swimsuit and towel', 'Sunscreen and sunglasses', 'Light layers for the boat ride', 'Camera', 'Cash or card for food and drinks on shore'],
+    rules: ['Maximum 12 guests per boat', 'Snorkelling equipment on board', 'Route is fully customisable', 'Not recommended for pregnant women or those with serious back/neck injuries', 'Skipper and fuel included — lunch and drinks extra', 'Available March through November'],
+    price: '€500 – €1,300 / boat',
+    note: 'Split between your group. Price depends on boat and duration.',
+    includes: ['Private boat & professional skipper', 'Snorkelling equipment', 'Fuel & marina fees', 'Fully customisable route', 'Up to 12 guests'],
+  },
+  'zipline': {
+    eyebrow: '04 · Adventure',
+    title: 'Zipline',
+    subtitle: 'Cetina Canyon · 3 Hours',
+    image: 'https://images.unsplash.com/photo-1601024445121-e5b82f020549?auto=format&fit=crop&w=1400&q=80',
+    meta: [
+      { label: 'Duration', val: '~3 Hours' },
+      { label: 'Lines', val: '8 Cables · 2,100m' },
+      { label: 'Location', val: 'Cetina Canyon' },
+      { label: 'Price', val: '€80 / person' },
+    ],
+    description: `Eight steel cables strung across the Cetina Canyon, the longest running 700 metres at 150 metres above the canyon floor. The Adriatic coast in the distance, the Dalmatian hills below you. No planning required — we sort the transport, the gear, and the guide.`,
+    bring: ['Sports shoes — trainers or hiking shoes (no sandals)', 'Comfortable, close-fitting clothing', 'At least 1 litre of water', 'Sunscreen', 'Small backpack for your belongings', 'Camera or GoPro'],
+    rules: ['Minimum age: 7 years old', 'Maximum weight: 140 kg', 'Participants under 17 must be accompanied by an adult', 'Not suitable for pregnant women or people with serious back injuries', 'Helmet and full harness provided and mandatory throughout', 'Bring fast-acting medication if you need it and inform your guide'],
+    price: '€80 / person',
+    note: 'All safety equipment included. Transport from Split arranged on request.',
+    includes: ['8-line zipline experience', 'Helmet, harness & full safety gear', 'Professional guide', 'Briefing & safety training'],
+  },
+  'quad': {
+    eyebrow: '05 · Adventure',
+    title: 'Quad Safari',
+    subtitle: 'Split Hinterland · 3 Hours',
+    image: 'https://images.unsplash.com/photo-1508739773434-c26b3d09e071?auto=format&fit=crop&w=1400&q=80',
+    meta: [
+      { label: 'Duration', val: '~3 Hours' },
+      { label: 'Distance', val: '40+ km trails' },
+      { label: 'Location', val: 'Split Hinterland' },
+      { label: 'Price', val: '€80 – €120 / person' },
+    ],
+    description: `Dust trails through olive groves and stone villages. The kind of landscape that doesn't make it onto postcards but stays in your memory. Sunset from the hills above Split with the whole Dalmatian coast laid out below — on your own machine, at your own pace.`,
+    bring: ['Valid driving licence (Category B)', 'Comfortable, dirt-friendly clothes', 'Closed-toe shoes — no sandals', 'Sunglasses and sunscreen', 'Light jacket (wind gets strong at elevation)', 'Water'],
+    rules: ['Valid driving licence required to drive — passengers from age 12', 'Minimum driver age: 18 years', 'Helmet and safety goggles provided and mandatory', 'Safety briefing and practice laps before departure', 'No alcohol before or during the tour', 'Follow the guide at all times — no overtaking on trails'],
+    price: '€80 – €120 / person',
+    note: 'Price depends on route and group size. Bring your driving licence.',
+    includes: ['Quad bike', 'Helmet, gloves & safety specs', 'Professional guide', 'Safety briefing & practice', 'Photos from the trail'],
+  },
+  'rafting': {
+    eyebrow: '06 · Adventure',
+    title: 'Rafting',
+    subtitle: 'Cetina River · Half Day',
+    image: 'https://images.unsplash.com/photo-1530866495561-507c9faab726?auto=format&fit=crop&w=1400&q=80',
+    meta: [
+      { label: 'Duration', val: '3–4 Hours' },
+      { label: 'Route', val: '10 km river' },
+      { label: 'Location', val: 'Cetina Canyon' },
+      { label: 'Price', val: '€50 / person' },
+    ],
+    description: `Cold, clear river water cutting through a limestone canyon inland from the coast. Ten kilometres of level 2–3 rapids, cliff jumps, and swimming holes in water so clean it's drinkable. No experience required. Available April through November.`,
+    bring: ['Swimsuit', 'Water shoes or old trainers you don't mind getting wet', 'Dry clothes and a towel for after', 'Waterproof camera or dry bag for your phone', 'Sunscreen'],
+    rules: ['Minimum age: 8 years', 'No previous experience necessary', 'Life jacket, paddle, and helmet provided and mandatory', 'No alcohol before or during the rafting', 'Follow guide instructions at all times', 'Available 1 April – end of November'],
+    price: '€50 / person',
+    note: 'All safety equipment and guide included. No experience needed.',
+    includes: ['Life jacket, helmet & paddle', 'Professional river guide', '10 km rafting route', 'Swimming & cliff jump stops', 'Transport from Split on request'],
+  },
+};
+
+function buildPage(tour, isMobile) {
+  const t = tours[tour];
+  const m = isMobile;
+  return `
+    <nav class="site-nav ${m ? 'mobile' : ''}">
+      <span class="logo">Split<span>.</span>Experience</span>
+      <span class="back-link">← Back</span>
+    </nav>
+
+    <div class="tour-hero ${m ? 'mobile' : ''}">
+      <img src="${t.image}" alt="${t.title}" />
+      <div class="hero-overlay ${m ? 'mobile' : ''}">
+        <div class="eyebrow">${t.eyebrow}</div>
+        <h1 class="tour-h1 ${m ? 'mobile' : ''}">${t.title}<span class="tour-subtitle">${t.subtitle}</span></h1>
+      </div>
+    </div>
+
+    <div class="meta-strip ${m ? 'mobile' : ''}">
+      ${t.meta.map(item => `
+        <div class="meta-item">
+          <div class="meta-label">${item.label}</div>
+          <div class="meta-val">${item.val}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <div class="tour-body ${m ? 'mobile' : ''}">
+      <div class="tour-main">
+        <div class="sec-label">About this experience</div>
+        <p class="tour-desc">${t.description}</p>
+
+        <h2 class="sec-title">What to bring</h2>
+        <ul class="checklist">
+          ${t.bring.map(i => `<li>${i}</li>`).join('')}
+        </ul>
+
+        <h2 class="sec-title">Rules & good to know</h2>
+        <div class="rules">
+          ${t.rules.map(r => `<div class="rule">${r}</div>`).join('')}
+        </div>
+      </div>
+
+      ${m ? `
+        <div class="booking-card">
+          <div class="bc-label">Price from</div>
+          <div class="bc-price">${t.price}</div>
+          <div class="bc-note">${t.note}</div>
+          <a href="#" class="btn-wa"><span class="wa-dot"></span>Book via WhatsApp</a>
+          <hr class="bc-div" />
+          <div class="bc-inc-title">What's included</div>
+          <ul class="inc-list">
+            ${t.includes.map(i => `<li>${i}</li>`).join('')}
+          </ul>
+        </div>
+      ` : `
+        <div class="tour-sidebar">
+          <div class="booking-card">
+            <div class="bc-label">Price from</div>
+            <div class="bc-price">${t.price}</div>
+            <div class="bc-note">${t.note}</div>
+            <a href="#" class="btn-wa"><span class="wa-dot"></span>Book via WhatsApp</a>
+            <hr class="bc-div" />
+            <div class="bc-inc-title">What's included</div>
+            <ul class="inc-list">
+              ${t.includes.map(i => `<li>${i}</li>`).join('')}
+            </ul>
+          </div>
+        </div>
+      `}
+    </div>
+
+    ${m ? `
+      <div class="mobile-sticky-cta">
+        <div class="mobile-price">
+          <small>From</small>
+          ${t.price}
+        </div>
+        <a href="#" class="btn-wa" style="width:auto;padding:13px 22px;flex-shrink:0;"><span class="wa-dot"></span>Book</a>
+      </div>
+    ` : ''}
+  `;
+}
+
+let currentTour = 'blue-cave';
+let currentView = 'desktop';
+
+function showTour(id) {
+  currentTour = id;
+  render();
+  document.querySelectorAll('.ptab').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase().replace(' ','').includes(id.replace('-',''))));
+}
+
+function setView(v) {
+  currentView = v;
+  render();
+  document.querySelectorAll('.vtab').forEach(b => b.classList.toggle('active', b.textContent.toLowerCase() === v));
+}
+
+function render() {
+  if (currentView === 'desktop') {
+    document.getElementById('desktop-view').classList.remove('hidden');
+    document.getElementById('mobile-view').classList.add('hidden');
+    document.getElementById('site-content-desktop').innerHTML = buildPage(currentTour, false);
+  } else {
+    document.getElementById('desktop-view').classList.add('hidden');
+    document.getElementById('mobile-view').classList.remove('hidden');
+    document.getElementById('phone-content').innerHTML = buildPage(currentTour, true);
+  }
+  document.querySelector('.preview-stage').scrollTop = 0;
+}
+
+render();
+</script>
+</body>
+</html>

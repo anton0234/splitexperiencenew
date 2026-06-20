@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "WebSearch",
-      "Bash(start \"\" \"C:\\\\Users\\\\User\\\\Desktop\\\\New folder \\(2\\)\\\\splitexperience\\\\public\\\\preview-tour-detail.html\")"
+      "Bash(start \"\" \"C:\\\\Users\\\\User\\\\Desktop\\\\New folder \\(2\\)\\\\splitexperience\\\\public\\\\preview-tour-detail.html\")",
+      "mcp__Claude_in_Chrome__tabs_context_mcp"
     ]
   }
 }
