@@ -4,7 +4,7 @@ const conciergeItems = [
   { title: 'Restaurant Reservations', desc: 'The places that are always full. We get you in, at the right table, at the right time.' },
   { title: 'Full Itinerary Planning', desc: 'Tell us how long you have. We plan every day from arrival to departure — nothing left to chance.' },
   { title: 'Special Occasions', desc: "Birthdays, proposals, anniversaries. Tell us what matters and we'll build something around it." },
-  { title: 'Hidden Beaches', desc: "The spots locals actually go to on their days off. Not what's on TripAdvisor. Directions provided." },
+  { title: 'Hidden Beaches', desc: "Quiet spots away from the crowds. We share exact directions — no tour group, no fuss." },
 ];
 
 interface ConciergeProps {
@@ -32,11 +32,11 @@ export default function Concierge({ hostName }: ConciergeProps) {
             color: 'rgba(255,255,255,0.32)', display: 'block',
             lineHeight: 1.5, marginTop: '10px',
           }}>
-            Name it. We&apos;ll make it happen.
+            We&apos;ll try to make it happen if possible.
           </span>
         </h2>
         <p style={{ fontSize: '13px', color: 'rgba(255,255,255,0.38)', lineHeight: 1.85, margin: '24px 0 32px' }}>
-          Private boat. Hidden beach. Birthday dinner inside a Roman palace. A full week planned from the moment you land — usually sorted within the hour.
+          Birthday party, anniversary dinner, something completely custom — tell us what you&apos;re after and we&apos;ll do our best to sort it out.
         </p>
         <a href={waUrl} target="_blank" rel="noopener noreferrer" className="btn-pink">
           <span className="wa-dot" />Talk to a local

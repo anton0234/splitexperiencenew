@@ -47,7 +47,7 @@ export const experiences: Experience[] = [
     subtitle: '& Hvar Island',
     duration: 'Full Day',
     location: 'Hvar · Vis Island',
-    price: 'From €130 per person',
+    price: '€130 per person',
     description:
       'The sea turns luminescent blue inside the cave on Vis Island — a natural phenomenon that stops people mid-sentence. Then Hvar, shown to you the way locals actually experience it: not the main strip.',
     image: '/images/hvar.jpg',
@@ -70,7 +70,7 @@ export const experiences: Experience[] = [
     subtitle: 'National Park',
     duration: 'Half Day',
     location: 'Šibenik Region',
-    price: 'From €35 per person',
+    price: '€40 per person',
     description:
       'Swim beneath waterfalls an hour from your door. Untouched Mediterranean woodland, cascades, and none of the tour-bus crowds — we know the right entry point and the right time to go.',
     image: '/images/krka.jpg',
@@ -93,7 +93,7 @@ export const experiences: Experience[] = [
     subtitle: 'Boat Tour',
     duration: 'Half or Full Day',
     location: 'Split Archipelago',
-    price: '€500 – €1300 per boat',
+    price: '€1000 per boat',
     description:
       'Your own skipper, your own route. Hidden coves, swimming stops only locals know, lunch wherever you decide. No schedule but yours.',
     image: 'https://images.unsplash.com/photo-1540946485063-a40da27545f8?auto=format&fit=crop&w=1400&q=80',
@@ -118,7 +118,7 @@ export const experiences: Experience[] = [
     subtitle: 'Split',
     duration: '3 Hours',
     location: 'Split Canyon',
-    price: 'From €80 per person',
+    price: '€80 per person',
     description:
       'Seven lines over a canyon. The Adriatic in the distance, the Dalmatian hills below you. No planning — we sort it all.',
     image: '/images/zipline.jpg',
@@ -141,7 +141,7 @@ export const experiences: Experience[] = [
     subtitle: 'Safari',
     duration: '3 Hours',
     location: 'Split Hinterland',
-    price: '€80 – €120 per person',
+    price: '€100 per person',
     description:
       'Dust trails through olive groves and stone villages. Sunset from the hills above Split with the whole Dalmatian coast below — on your own machine.',
     image: '/images/quad.jpg',
@@ -164,7 +164,7 @@ export const experiences: Experience[] = [
     subtitle: 'Cetina River',
     duration: 'Half Day',
     location: 'Cetina River Canyon',
-    price: 'From €50 per person',
+    price: '€65 per person',
     description:
       'Cold, clear river water cutting through a limestone canyon inland from the coast. Rapids, jumps off the rocks, and a swim in water so clean you can drink it.',
     image: '/images/rafting.jpg',
@@ -176,7 +176,7 @@ export const experiences: Experience[] = [
     longDescription: 'Cold, clear river water cutting through a limestone canyon inland from the coast. Ten kilometres of level 2–3 rapids, cliff jumps, and swimming holes in water so clean you can drink it. No experience required. Available April through November.',
     bring: ['Swimsuit', 'Water shoes or old trainers you don\'t mind getting wet', 'Dry clothes and a towel for after', 'Waterproof camera or dry bag for your phone', 'Sunscreen'],
     rules: ['Minimum age: 8 years', 'No previous experience necessary — guides brief everyone before departure', 'Life jacket, paddle, and helmet provided and mandatory throughout', 'No alcohol before or during the rafting', 'Follow guide instructions at all times', 'Available 1 April – end of November'],
-    includes: ['Life jacket, helmet & paddle', 'Professional river guide', '10 km rafting route', 'Swimming & cliff jump stops', 'Transport from Split on request'],
+    includes: ['Life jacket, helmet & paddle', 'Professional river guide', '10 km rafting route', 'Swimming & cliff jump stops', 'Transport from Split included'],
   },
 
   // ── DINING ───────────────────────────────────────────────

@@ -45,7 +45,7 @@ export default function ExpCard({ exp, hostName, style, compact }: ExpCardProps)
         <div style={{ fontSize: '10px', letterSpacing: '0.26em', textTransform: 'uppercase', color: 'rgba(255,255,255,0.38)', marginBottom: compact ? '4px' : '7px' }}>
           {exp.duration}
           {exp.location && <> · {exp.location}</>}
-          {exp.price && <> · {exp.price}</>}
+          {exp.price && <> · <span style={{ color: '#fff', fontWeight: 700, letterSpacing: '0.1em' }}>{exp.price}</span></>}
         </div>
 
         <h2 style={{
@@ -57,16 +57,6 @@ export default function ExpCard({ exp, hostName, style, compact }: ExpCardProps)
           {exp.title}
           {exp.subtitle && <><br />{exp.subtitle}</>}
         </h2>
-
-        {!compact && (
-          <p style={{
-            fontSize: '12px', color: 'rgba(255,255,255,0.5)',
-            lineHeight: 1.75, marginBottom: '18px',
-            display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden',
-          } as React.CSSProperties}>
-            {exp.description}
-          </p>
-        )}
 
         {(exp.ctaLabel || hasTourPage) && (
           <div style={{

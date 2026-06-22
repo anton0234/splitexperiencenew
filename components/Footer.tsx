@@ -26,7 +26,7 @@ export default function Footer() {
             Split<span style={{ color: '#e8356d' }}>.</span>Experience
           </Link>
           <p style={{ fontSize: '12px', color: '#444', lineHeight: 1.75, maxWidth: '200px' }}>
-            Eleven hand-picked experiences in Split. Booked via WhatsApp in sixty seconds.
+            Eleven honest picks in Split, put together by locals.
           </p>
         </div>
 

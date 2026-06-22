@@ -39,18 +39,18 @@ export default function Hero({ hostName }: HeroProps) {
             color: 'rgba(255,255,255,0.55)', display: 'block',
             lineHeight: 1.5, letterSpacing: '0.01em', marginTop: '8px',
           }}>
-            No filler. No algorithm.
+            Honest picks.
           </span>
         </h1>
 
         <p style={{ fontSize: '14px', color: 'rgba(255,255,255,0.48)', lineHeight: 1.85, maxWidth: '340px', marginBottom: '32px' }}>
-          Eleven things worth doing in Split — curated by locals, booked via WhatsApp in sixty seconds.
+          Eleven things worth doing in Split — put together by people who actually live here.
         </p>
 
         <div className="hero-ctas">
           <a href={talkUrl} target="_blank" rel="noopener noreferrer" className="btn-pink">
             <span className="wa-dot" />
-            Talk to a local
+            Talk to your guide
           </a>
           <a href="#explore" className="btn-outline-dark">See all eleven</a>
         </div>
